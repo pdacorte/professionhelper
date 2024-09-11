@@ -86,13 +86,13 @@ const progressBar = document.querySelector('.progress');
 
 // Define professions with their personality profiles
 const professions = {
-    "Software Developer": { extraversion: 1, agreeableness: 1, neuroticism: 3, conscientiousness: 3, openness: 3 },
+    "Software Developer": { extraversion: 1, agreeableness: 1, neuroticism: 3, conscientiousness: 10, openness: 8 },
     "Teacher": { extraversion: 12, agreeableness: 15, neuroticism: 10, conscientiousness: 10, openness: 10 },
-    "Entrepreneur": { extraversion: 15, agreeableness: 5, neuroticism: 3, conscientiousness: 15, openness: 10 },
-    "Nurse": { extraversion: 8, agreeableness: 15, neuroticism: 10, conscientiousness: 12, openness: 10 },
+    "Entrepreneur": { extraversion: 15, agreeableness: 5, neuroticism: 1, conscientiousness: 15, openness: 10 },
+    "Nurse": { extraversion: 10, agreeableness: 15, neuroticism: 10, conscientiousness: 12, openness: 10 },
     "Artist": { extraversion: 5, agreeableness: 5, neuroticism: 15, conscientiousness: 3, openness: 15 },
-    "Sales": { extraversion: 15, agreeableness: 5, neuroticism: 3, conscientiousness: 10, openness: 5 },
-    "Pharmacist": { extraversion: 5, agreeableness: 15, neuroticism: 8, conscientiousness: 10, openness: 10 },
+    "Sales": { extraversion: 15, agreeableness: 8, neuroticism: 1, conscientiousness: 10, openness: 5 },
+    "Pharmacist": { extraversion: 5, agreeableness: 12, neuroticism: 12, conscientiousness: 10, openness: 10 },
     // Add more professions as needed
 };
 
@@ -223,13 +223,15 @@ function updateProgressBar() {
 function showResults() {
     showScreen('result');
     resultsContainer.innerHTML = '';
-    for (let trait in answers) {
-        resultsContainer.innerHTML += `<p>${trait}: ${answers[trait]}</p>`;
-    }
-
+    
     // Calculate average scores
     for (let trait in answers) {
-        answers[trait] = answers[trait] / 3; // Divide by 3 as we have 3 questions per trait
+        answers[trait] = Math.round(answers[trait] / 3); // Round to nearest integer
+    }
+
+    // Display user's scores
+    for (let trait in answers) {
+        resultsContainer.innerHTML += `<p>${trait}: ${answers[trait]}</p>`;
     }
 
     // Find matching professions
@@ -239,8 +241,8 @@ function showResults() {
     matchingProfessions.forEach(profession => {
         resultsContainer.innerHTML += `
             <div class="profession-result">
-                <img src="sprites/${profession.toLowerCase().replace(/\s+/g, '-')}.jpg" alt="${profession}" width="150" height="150">
-                <p>${profession}</p>
+                <img src="sprites/${profession.profession.toLowerCase().replace(/\s+/g, '-')}.jpg" alt="${profession.profession}" width="150" height="150">
+                <p>${profession.profession} (Similarity: ${profession.similarity.toFixed(2)}%)</p>
             </div>
         `;
     });
@@ -248,19 +250,30 @@ function showResults() {
 
 function findMatchingProfessions(userProfile) {
     const professionScores = Object.keys(professions).map(profession => {
-        const score = calculateSimilarity(userProfile, professions[profession]);
-        return { profession, score };
+        const similarity = calculateSimilarity(userProfile, professions[profession]);
+        return { profession, similarity };
     });
 
-    professionScores.sort((a, b) => b.score - a.score);
-    return professionScores.slice(0, 3).map(p => p.profession);
+    // Sort by similarity and add some randomness
+    professionScores.sort((a, b) => {
+        const randomFactor = Math.random() * 10 - 5; // Random value between -5 and 5
+        return (b.similarity + randomFactor) - (a.similarity + randomFactor);
+    });
+
+    return professionScores.slice(0, 3);
 }
 
 function calculateSimilarity(profile1, profile2) {
-    return Object.keys(profile1).reduce((sum, trait) => {
-        return sum - Math.abs(profile1[trait] - profile2[trait]);
+    const traits = Object.keys(profile1);
+    const maxDifference = 16 * traits.length; // Maximum possible difference (0-16 scale)
+    const totalDifference = traits.reduce((sum, trait) => {
+        return sum + Math.abs(profile1[trait] - profile2[trait]);
     }, 0);
+    
+    // Convert difference to a similarity score (0 to 100)
+    return 100 * (1 - totalDifference / maxDifference);
 }
+
 
 nextButton.addEventListener('click', selectAnswer);
 
