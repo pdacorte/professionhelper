@@ -88,9 +88,9 @@ const progressBar = document.querySelector('.progress');
 const professions = {
     "Software Developer": { extraversion: 1, agreeableness: 1, neuroticism: 3, conscientiousness: 3, openness: 3 },
     "Teacher": { extraversion: 12, agreeableness: 15, neuroticism: 10, conscientiousness: 10, openness: 10 },
-    "Entrepreneur": { extraversion: 4, agreeableness: 3, neuroticism: 2, conscientiousness: 4, openness: 5 },
-    "Nurse": { extraversion: 4, agreeableness: 15, neuroticism: 3, conscientiousness: 4, openness: 10 },
-    "Artist": { extraversion: 5, agreeableness: 3, neuroticism: 15, conscientiousness: 3, openness: 15 },
+    "Entrepreneur": { extraversion: 15, agreeableness: 5, neuroticism: 3, conscientiousness: 15, openness: 10 },
+    "Nurse": { extraversion: 8, agreeableness: 15, neuroticism: 10, conscientiousness: 12, openness: 10 },
+    "Artist": { extraversion: 5, agreeableness: 5, neuroticism: 15, conscientiousness: 3, openness: 15 },
     "Sales": { extraversion: 15, agreeableness: 5, neuroticism: 3, conscientiousness: 10, openness: 5 },
     "Pharmacist": { extraversion: 5, agreeableness: 15, neuroticism: 8, conscientiousness: 10, openness: 10 },
     // Add more professions as needed
