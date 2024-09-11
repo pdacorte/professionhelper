@@ -1,3 +1,5 @@
+// Question Pool 
+
 let questions = [
     { text: "I am talkative.", trait: "extraversion", reverse: false },
     { text: "I am reserved.", trait: "extraversion", reverse: true },
@@ -85,10 +87,12 @@ const progressBar = document.querySelector('.progress');
 // Define professions with their personality profiles
 const professions = {
     "Software Developer": { extraversion: 1, agreeableness: 1, neuroticism: 3, conscientiousness: 3, openness: 3 },
-    "Teacher": { extraversion: 5, agreeableness: 5, neuroticism: 2, conscientiousness: 2, openness: 4 },
+    "Teacher": { extraversion: 12, agreeableness: 15, neuroticism: 10, conscientiousness: 10, openness: 10 },
     "Entrepreneur": { extraversion: 4, agreeableness: 3, neuroticism: 2, conscientiousness: 4, openness: 5 },
-    "Nurse": { extraversion: 4, agreeableness: 5, neuroticism: 3, conscientiousness: 4, openness: 3 },
-    "Artist": { extraversion: 2, agreeableness: 3, neuroticism: 5, conscientiousness: 2, openness: 5 },
+    "Nurse": { extraversion: 4, agreeableness: 15, neuroticism: 3, conscientiousness: 4, openness: 10 },
+    "Artist": { extraversion: 5, agreeableness: 3, neuroticism: 15, conscientiousness: 3, openness: 15 },
+    "Sales": { extraversion: 15, agreeableness: 5, neuroticism: 3, conscientiousness: 10, openness: 5 },
+    "Pharmacist": { extraversion: 5, agreeableness: 15, neuroticism: 8, conscientiousness: 10, openness: 10 },
     // Add more professions as needed
 };
 
@@ -215,6 +219,7 @@ function updateProgressBar() {
     progressBar.style.width = progressPercentage + '%';
 }
 
+// Results Page 
 function showResults() {
     showScreen('result');
     resultsContainer.innerHTML = '';
@@ -232,7 +237,12 @@ function showResults() {
     
     resultsContainer.innerHTML += `<h3>Recommended Professions:</h3>`;
     matchingProfessions.forEach(profession => {
-        resultsContainer.innerHTML += `<p>${profession}</p>`;
+        resultsContainer.innerHTML += `
+            <div class="profession-result">
+                <img src="sprites/${profession.toLowerCase().replace(/\s+/g, '-')}.jpg" alt="${profession}" width="150" height="150">
+                <p>${profession}</p>
+            </div>
+        `;
     });
 }
 

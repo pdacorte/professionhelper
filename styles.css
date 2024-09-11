@@ -1,11 +1,51 @@
+/* General Styles */ 
 body {
-    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
     background-color: #f4f4f9;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    margin-bottom: 1.5rem;
+}
+
+
+
+/* Header */
+header {
+    background-color: #4a7c47;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top:0;
+    width: 100%;
+}
+
+nav {
+    position: relative;
+}
+
+/* Page State 1 - Instruction Screen */
+
+#instruction-screen ul {
+    padding-left: 35px;
+    padding-bottom: 30px;
+}
+
+
+li::marker {
+    content: "🍊 ";
 }
 
 .quiz-container {
@@ -136,6 +176,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'PixelFont', monospace;
 }
 
 body {
@@ -151,22 +192,13 @@ body {
     min-height: 100vh;
 }
 
-header {
-    background-color: #4a7c47;
-    color: white;
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+
 
 h1 {
     font-size: 1.5rem;
 }
 
-nav {
-    position: relative;
-}
+
 
 #menuToggle {
     background-color: #2e1a05;
@@ -223,14 +255,7 @@ main {
     border: 4px solid #2e1a05;
 }
 
-h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
 
-p {
-    margin-bottom: 1.5rem;
-}
 
 .start-button {
     display: inline-block;
@@ -252,6 +277,9 @@ footer {
     text-align: center;
     padding: 1rem;
     font-size: 0.8rem;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
