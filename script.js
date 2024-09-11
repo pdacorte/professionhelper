@@ -224,11 +224,6 @@ function showResults() {
     showScreen('result');
     resultsContainer.innerHTML = '';
     
-    // Calculate average scores
-    for (let trait in answers) {
-        answers[trait] = Math.round(answers[trait] / 3); // Round to nearest integer
-    }
-
     // Display user's scores
     for (let trait in answers) {
         resultsContainer.innerHTML += `<p>${trait}: ${answers[trait]}</p>`;
@@ -254,18 +249,16 @@ function findMatchingProfessions(userProfile) {
         return { profession, similarity };
     });
 
-    // Sort by similarity and add some randomness
-    professionScores.sort((a, b) => {
-        const randomFactor = Math.random() * 10 - 5; // Random value between -5 and 5
-        return (b.similarity + randomFactor) - (a.similarity + randomFactor);
-    });
+    // Sort by similarity in descending order
+    professionScores.sort((a, b) => b.similarity - a.similarity);
 
+    // Return the top 3 matches
     return professionScores.slice(0, 3);
 }
 
 function calculateSimilarity(profile1, profile2) {
     const traits = Object.keys(profile1);
-    const maxDifference = 16 * traits.length; // Maximum possible difference (0-16 scale)
+    const maxDifference = 15 * traits.length; // Maximum possible difference (0-15 scale)
     const totalDifference = traits.reduce((sum, trait) => {
         return sum + Math.abs(profile1[trait] - profile2[trait]);
     }, 0);
