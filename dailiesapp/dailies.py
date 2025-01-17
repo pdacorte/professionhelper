@@ -22,6 +22,9 @@ import dailiesdb as db
 #- Kaizen Streak Counter 
 #- Kaizen Longest Streak
 #- Email alert for missed tasks / Daily breakdown?
+#- Pomodoro timer
+#- Habit tracker + Creator > Set what habits you want to create and they'll become created after 30d of consecutive use. Reset after 1 day of failure
+#- Kanban lists
 
 
 def main():
@@ -47,7 +50,7 @@ def main():
             task_type = st.selectbox("Task Type", ["Goal", "Non-Negotiable"])
 
         with col2:
-            task_status = "Not done"
+            task_status = False
             task_start_date = st.date_input("Start Date",value="today")
 
         if st.button("Add Task"):
@@ -57,30 +60,69 @@ def main():
 
 
     elif choice == "Read":
-        st.subheader("View Items")
+        st.subheader("View Remaining Items")
 
         result = db.select_all()
-        df = pd.DataFrame(result, columns=['Task', 'Type', 'Status', 'Start Date', 'Finished Date'])
-        st.dataframe(df)
+        df = pd.DataFrame(result, columns=['Id', 'Task', 'Type', 'Status', 'Start Date', 'Finished Date'])
+        df['Status'] = df["Status"].astype(bool)
+
+        edited_df = st.data_editor(df[df["Status"].isin([False, 0])])
+        
+        with st.expander("Show all tasks"):
+            st.dataframe(df)
 
         with st.expander("Statistics"):
             count_df = df['Status'].value_counts().to_frame()
-
+            #count_df['Status'] = count_df["Status"].map({1: "Done", 0: "Not done"})
             st.dataframe(count_df)
         
         with st.expander("Visualize"):
-            
             bar_chart = px.bar(count_df)
+            bar_chart.update_xaxes(tickvals=[0, 1],ticktext=["Not done", "Done"]
+)
             st.plotly_chart(bar_chart)
+            
+
+        #with st.expander("Making it good"):
+        #    edited_df = st.data_editor(df[df["Status"].isin([False, 0])])
+            #filtered_df = df[df["status"].isin([True, 1])]
+    
 
 
     elif choice == "Update":
         st.subheader("Edit/Update Items")
 
         result = db.select_all()
-        df = pd.DataFrame(result, columns=['Task', 'Type', 'Status', 'Start Date', 'Finished Date'])
+        df = pd.DataFrame(result, columns=['Id','Task', 'Type', 'Status', 'Start Date', 'Finished Date'])
+        df['Status'] = df["Status"].astype(bool)
+
+        edited_df = st.data_editor(df)
         
-        st.dataframe(df)
+        # Check if changes were made to df
+        if not edited_df.equals(df):
+            st.write("Changes detected. Updating database...")
+
+            replicated_tasks = set()
+            # Update the SQLite database
+            for index,row in edited_df.iterrows():
+                taskid = row[0]
+                task = row[1]
+                task_type = row[2]
+                updated_task_status = int(row[3])
+                task_end_date = row[5]
+
+                print("Lopping through {}".format(task))
+                print(replicated_tasks)
+                if task_type == "Non-Negotiable" and taskid in replicated_tasks:
+                    continue  # Skip processing if task already replicated
+                
+                db.status_change(updated_task_status, taskid, task, task_type, task_end_date)
+
+                # Add the task to the set if it's marked as done
+                if updated_task_status == 1 and task_type == "Non-Negotiable":
+                    replicated_tasks.add(task)
+
+
         list_of_tasks = [i[0] for i in db.select_unique()]
         st.write(list_of_tasks)
 
@@ -91,10 +133,10 @@ def main():
 
         # Update Part
         if selected_result:
-            task = selected_result[0][0]
-            task_type = selected_result[0][1]
-            task_status = selected_result[0][2]
-            task_start_date = selected_result[0][3]
+            task = selected_result[0][1]
+            task_type = selected_result[0][2]
+            task_status = selected_result[0][3]
+            task_start_date = selected_result[0][4]
 
 
             col1,col2 = st.columns(2)
@@ -112,7 +154,7 @@ def main():
                     status_index = 0
                 else:
                     status_index = 1
-                updated_task_status = st.selectbox("Task Status", ["Not done", "Done"], index=status_index)
+                updated_task_status = st.selectbox("Done?", [True, False], index=status_index)
                 updated_task_start_date = st.date_input("Start Date",value=task_start_date)
 
             if st.button("Update Task"):
@@ -121,7 +163,7 @@ def main():
 
             with st.expander("Updated Data"):
                 result2 = db.select_all()
-                df2 = pd.DataFrame(result2, columns=['Task', 'Type', 'Status', 'Start Date', 'Finished Date'])
+                df2 = pd.DataFrame(result2, columns=['Id','Task', 'Type', 'Status', 'Start Date', 'Finished Date'])
                 st.dataframe(df2)
 
 
@@ -132,7 +174,7 @@ def main():
 
         with st.expander("Current Data"):
                 result2 = db.select_all()
-                df2 = pd.DataFrame(result2, columns=['Task', 'Type', 'Status', 'Start Date', 'Finished Date'])
+                df2 = pd.DataFrame(result2, columns=['Id','Task', 'Type', 'Status', 'Start Date', 'Finished Date'])
                 st.dataframe(df2)
         
         
@@ -143,12 +185,6 @@ def main():
         if st.button("Delete Task"):
             db.delete_row(selected_task)
             st.success("Successfully deleted task: {}".format(selected_task))
-
-
-
-
-
-
 
     else:
         st.subheader("About")
