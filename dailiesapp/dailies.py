@@ -103,7 +103,7 @@ def main():
             st.write("Changes detected. Updating database...")
 
             replicated_tasks = set()
-            # Update the SQLite database
+            # Update the SQLite database by looping through all rows. If a row has a duplicate task name, then we add it 
             for index,row in edited_df.iterrows():
                 taskid = row[0]
                 task = row[1]
@@ -118,9 +118,9 @@ def main():
                 
                 db.status_change(updated_task_status, taskid, task, task_type, task_end_date)
 
-                # Add the task to the set if it's marked as done
+                # Add the task to the set if it's marked as done - Is this redundant? Test
                 if updated_task_status == 1 and task_type == "Non-Negotiable":
-                    replicated_tasks.add(task)
+                    replicated_tasks.add(taskid)
 
 
         list_of_tasks = [i[0] for i in db.select_unique()]

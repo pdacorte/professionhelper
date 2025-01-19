@@ -39,6 +39,7 @@ def delete_row(task):
     c.execute('DELETE FROM tasktable WHERE task="{}"'.format(task))
     conn.commit()
 
+# This one is such a mess. There's a bit of redundancy with some logic handled in dailies.py and some here, fix that asap. 
 def status_change(updated_task_status, taskid, task, task_type, task_end_date):
     today = date.today().strftime("%Y-%m-%d")
     tomorrow = (date.today() + timedelta(days=1)).strftime("%Y-%m-%d")
