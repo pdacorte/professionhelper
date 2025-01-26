@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dailies App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dailies App</h1>
+            <div id="today-info">
+                <!-- Today's date and completed tasks will go here -->
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="column">
+                <section class="tasks-section">
+                    <h2>Ongoing Tasks</h2>
+                    <div class="task-list" id="ongoing-tasks">
+                        <!-- Tasks will be dynamically added here -->
+                    </div>
+
+                    <div class="add-task-form">
+                        <h3>Add New Task</h3>
+                        <input type="text" id="task-input" placeholder="Enter task..." required>
+                        <select id="task-type" required>
+                            <option value="Goal">Goal</option>
+                            <option value="Non-Negotiable">Non-Negotiable</option>
+                        </select>
+                        <button type="button" onclick="addTask()">Add Task</button>
+                    </div>
+                </section>
+            </div>
+
+            <div class="column">
+                <section class="completed-section">
+                    <h2>Last 5 Completed Tasks</h2>
+                    <div id="completed-tasks">
+                        <!-- Completed tasks will go here -->
+                    </div>
+                    <div id="seven-day-overview">
+                        <!-- 7-day overview will go here -->
+                    </div>
+                </section>
+
+                <section class="stats-section">
+                    <h2>Statistics</h2>
+                    <div class="streak-counter">
+                        <h3>🔥 Current Streak</h3>
+                        <span id="streak-count">0 days</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="progress-chart"></canvas>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 

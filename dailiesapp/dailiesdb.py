@@ -7,6 +7,7 @@ c = conn.cursor()
 
 
 # Table
+# Basic Database Interactions
 
 def create_table():
     c.execute('CREATE TABLE IF NOT EXISTS tasktable(id INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT, task_type TEXT, task_status BOOLEAN DEFAULT FALSE, task_start_date DATE, task_end_date DATE)')
@@ -28,6 +29,11 @@ def select_unique():
 
 def return_task(task):
     c.execute("SELECT * FROM tasktable WHERE task='{}'".format(task))
+    data = c.fetchall()
+    return data
+
+def last_5():
+    c.execute("SELECT * FROM tasktable WHERE task_status = 1 ORDER BY task_end_date DESC, id DESC LIMIT 5;")
     data = c.fetchall()
     return data
 
@@ -67,20 +73,55 @@ def status_change(updated_task_status, taskid, task, task_type, task_end_date):
         print("This is state 3")
         conn.commit()
 
-# GOTTA FIGURE THIS OUT LATER
-def completion_date():
+
+def last_30_day_completed():
+    last30d = (date.today() - timedelta(days=30)).strftime('%Y-%m-%d')
+    data = c.execute("SELECT COUNT(*) FROM tasktable WHERE task_end_date >= ? AND task_status = 1", (last30d,))
+    return data.fetchone()[0]
+
+def get_completed_count_for_date(date):
+    date_str = date.strftime('%Y-%m-%d')
     c.execute("""
-CREATE TRIGGER IF NOT EXISTS update_task_end_date
-AFTER UPDATE OF task_status ON tasktable
-FOR EACH ROW
-WHEN NEW.task_status = 'Done' AND OLD.task_status = 'Not done'
-BEGIN
-    UPDATE tasks
-    SET task_finish_date = DATE('now')
-    WHERE task_id = NEW.task_id;
-END;
-""")
-    c.commit()  # Save changes
+        SELECT COUNT(*) 
+        FROM tasktable 
+        WHERE task_status = 1 
+        AND task_end_date = ?
+    """, (date_str,))
+    return c.fetchone()[0]
+
+def today_completed():
+    today = date.today().strftime('%Y-%m-%d')
+    c.execute("""
+        SELECT COUNT(*) 
+        FROM tasktable 
+        WHERE task_status = 1 
+        AND task_end_date = ?
+    """, (today,))
+    return c.fetchone()[0]
+
+def get_current_streak():
+    today = date.today()
+    streak = 0
+    current_date = today
+    
+    while True:
+        date_str = current_date.strftime('%Y-%m-%d')
+        c.execute("""
+            SELECT COUNT(*) 
+            FROM tasktable 
+            WHERE task_status = 1 
+            AND task_end_date = ?
+        """, (date_str,))
+        completed_count = c.fetchone()[0]
+        
+        if completed_count == 0:
+            break
+        
+        streak += 1
+        current_date -= timedelta(days=1)
+    
+    return streak
+
 #"""
 #Type - Choice - Non-Negotiable/Daily
 #Goal - Text Field 
