@@ -158,7 +158,7 @@ const CAREERS = {
         keyTraits: ["High Extraversion", "High Openness"]
     },
     "Social Worker": {
-        traits: { openness: 3.8, conscientiousness: 3.8, extraversion: 3.5, agreeableness: 4.8, neuroticism: 3.0 },
+        traits: { openness: 3.8, conscientiousness: 3.8, extraversion: 3.5, agreeableness: 4.8, neuroticism: 3.3 },
         description: "Helps individuals and communities",
         keyTraits: ["Very High Agreeableness"]
     },
@@ -179,6 +179,11 @@ const CAREERS = {
     },
     "Human Resources Manager": {
         traits: { openness: 3.5, conscientiousness: 4.0, extraversion: 4.0, agreeableness: 4.3, neuroticism: 2.5 },
+        description: "Manages employee relations and policies",
+        keyTraits: ["High Agreeableness", "High Extraversion"]
+    },
+    "Pharmacist": {
+        traits: { openness: 3.0, conscientiousness: 4.5, extraversion: 4.0, agreeableness: 4.5, neuroticism: 2.9 },
         description: "Manages employee relations and policies",
         keyTraits: ["High Agreeableness", "High Extraversion"]
     }
