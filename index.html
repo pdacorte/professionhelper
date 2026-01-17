@@ -3,67 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profession Personality Quiz</title>
+    <title>Career Personality Quiz | Big Five Assessment</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Profession Quiz</h1>
-        <nav>
-            <button id="menuToggle">Menu ▼</button>
-            <ul id="menu">
-                <li><a href="https://pdacorte.github.io/professionhelper/">Home</a></li>
-                <li><a href="https://pdacorte.github.io/professionhelper/dailies.html">Dailies</a></li>
-                <li><a href="https://pdacorte.github.io/professionhelper/future.html">Future Authoring</a></li>
-            </ul>
-        </nav>
+    <header class="header">
+        <div class="header__container">
+            <h1 class="header__title">Career Quiz</h1>
+            <nav class="nav">
+                <button class="nav__toggle" id="menuToggle" aria-label="Toggle menu">
+                    <span class="nav__toggle-icon"></span>
+                </button>
+                <ul class="nav__menu" id="menu">
+                    <li><a href="index.html" class="nav__link nav__link--active">Home</a></li>
+                    <li><a href="dailies.html" class="nav__link">Dailies</a></li>
+                    <li><a href="future.html" class="nav__link">Future Authoring</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <div class="container">
-        
-        <main>
-            <div class="quiz-container">
-                <button id="restart-btn" class="btn">Restart</button>
-                <h1>Profession Personality Quiz</h1>
-                <div id="instruction-screen">
-                    <h2>Instructions</h2>
-                    <p>Welcome to the Big Five Personality Quiz! This quiz will help you understand your personality traits and suggest potential career paths.</p>
-                    <p>You'll be presented with 15 statements. For each statement, choose a number from 1 to 5 that best describes how much you agree with it:</p>
-                    <ul>
-                        <li>1 - Strongly Disagree</li>
-                        <li>2 - Disagree</li>
-                        <li>3 - Neutral</li>
-                        <li>4 - Agree</li>
-                        <li>5 - Strongly Agree</li>
-                    </ul>
-                    <p>Answer honestly to get the most accurate results. Ready to begin?</p>
-                    <button id="start-btn" class="btn">Start Quiz</button>
-                </div>
-                <div id="quiz-screen" class="hide">
-                    <div class="progress-bar">
-                        <div class="progress"></div>
+    <main class="main">
+        <div class="quiz" id="quiz">
+            <!-- Instruction Screen -->
+            <section class="quiz__screen quiz__screen--active" id="instruction-screen">
+                <div class="quiz__card">
+                    <h2 class="quiz__title">Discover Your Ideal Career</h2>
+                    <p class="quiz__description">
+                        Take this Big Five personality assessment to discover careers that match your unique traits. 
+                        The quiz measures five key dimensions of personality.
+                    </p>
+                    
+                    <div class="traits-preview">
+                        <div class="trait-badge">
+                            <span class="trait-badge__icon">O</span>
+                            <span class="trait-badge__label">Openness</span>
+                        </div>
+                        <div class="trait-badge">
+                            <span class="trait-badge__icon">C</span>
+                            <span class="trait-badge__label">Conscientiousness</span>
+                        </div>
+                        <div class="trait-badge">
+                            <span class="trait-badge__icon">E</span>
+                            <span class="trait-badge__label">Extraversion</span>
+                        </div>
+                        <div class="trait-badge">
+                            <span class="trait-badge__icon">A</span>
+                            <span class="trait-badge__label">Agreeableness</span>
+                        </div>
+                        <div class="trait-badge">
+                            <span class="trait-badge__icon">N</span>
+                            <span class="trait-badge__label">Neuroticism</span>
+                        </div>
                     </div>
-                    <div id="question-container">
-                        <div id="question">Question text will appear here</div>
-                        <div id="answer-buttons" class="btn-container"></div>
+
+                    <div class="quiz__info">
+                        <div class="quiz__info-item">
+                            <span class="quiz__info-number">25</span>
+                            <span class="quiz__info-label">Questions</span>
+                        </div>
+                        <div class="quiz__info-item">
+                            <span class="quiz__info-number">5</span>
+                            <span class="quiz__info-label">Minutes</span>
+                        </div>
+                        <div class="quiz__info-item">
+                            <span class="quiz__info-number">15+</span>
+                            <span class="quiz__info-label">Careers</span>
+                        </div>
                     </div>
-                    <button id="next-btn" class="btn">Next</button>
+
+                    <button class="btn btn--primary btn--large" id="start-btn">
+                        Start Assessment
+                    </button>
                 </div>
-                <div id="result-screen" class="hide">
-                    <h2>Your Results</h2>
-                    <div id="results-container"></div>
-                    <button id="restart-quiz-btn" class="btn">Restart Quiz</button>
+            </section>
+
+            <!-- Quiz Screen -->
+            <section class="quiz__screen" id="quiz-screen">
+                <div class="quiz__card quiz__card--quiz">
+                    <button class="btn btn--ghost btn--restart" id="restart-btn" aria-label="Restart quiz">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                        </svg>
+                        Restart
+                    </button>
+
+                    <div class="progress">
+                        <div class="progress__bar">
+                            <div class="progress__fill" id="progress-fill"></div>
+                        </div>
+                        <span class="progress__text" id="progress-text">0 / 25</span>
+                    </div>
+
+                    <div class="question" id="question-container">
+                        <p class="question__trait" id="question-trait">Extraversion</p>
+                        <h3 class="question__text" id="question-text">Loading question...</h3>
+                    </div>
+
+                    <div class="answers" id="answer-buttons">
+                        <button class="answer-btn" data-value="1">
+                            <span class="answer-btn__value">1</span>
+                            <span class="answer-btn__label">Strongly Disagree</span>
+                        </button>
+                        <button class="answer-btn" data-value="2">
+                            <span class="answer-btn__value">2</span>
+                            <span class="answer-btn__label">Disagree</span>
+                        </button>
+                        <button class="answer-btn" data-value="3">
+                            <span class="answer-btn__value">3</span>
+                            <span class="answer-btn__label">Neutral</span>
+                        </button>
+                        <button class="answer-btn" data-value="4">
+                            <span class="answer-btn__value">4</span>
+                            <span class="answer-btn__label">Agree</span>
+                        </button>
+                        <button class="answer-btn" data-value="5">
+                            <span class="answer-btn__value">5</span>
+                            <span class="answer-btn__label">Strongly Agree</span>
+                        </button>
+                    </div>
+
+                    <button class="btn btn--primary" id="next-btn" disabled>
+                        Next Question
+                    </button>
                 </div>
-            </div>
-        </main>
-        
-    </div>
-    
-    <footer>
-        <p>Discover the ideal career for you</p>
+            </section>
+
+            <!-- Results Screen -->
+            <section class="quiz__screen" id="result-screen">
+                <div class="quiz__card quiz__card--results">
+                    <h2 class="quiz__title">Your Personality Profile</h2>
+                    
+                    <div class="results-traits" id="traits-chart">
+                        <!-- Trait bars will be inserted here -->
+                    </div>
+
+                    <h3 class="results__subtitle">Recommended Careers</h3>
+                    <div class="results-careers" id="careers-list">
+                        <!-- Career cards will be inserted here -->
+                    </div>
+
+                    <button class="btn btn--primary" id="restart-quiz-btn">
+                        Take Quiz Again
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Discover the career path that fits your personality</p>
     </footer>
 
-    
     <script src="script.js"></script>
 </body>
 </html>
